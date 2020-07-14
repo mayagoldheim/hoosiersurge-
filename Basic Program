@@ -1,0 +1,167 @@
+# The Course Class
+class Course:
+    def __init__(self, courseName, days, section = "A"):
+        self.courseName = courseName
+        self.days = days
+        self.section = section
+    # Print Method
+    def __str__(self):
+        return "Course Name: %s \n" \
+               "Meeting Days: %s \n" \
+               "Section: %s" % (self.courseName, self.days, self.section)
+
+# Method used to create a new course from user input
+def user_input_course():
+    courseName = input('Course Name: ')
+    days = input('Meeting days (in MTWHF format): ')
+    section = input('Section: ')
+    course = Course(courseName, days, section)
+    return course
+
+# Method to print a list of all courses
+def print_courses(list):
+    for course in list:
+        print(course)
+    print("\n")
+
+# Creating the list of students
+studentList = []
+
+# The Student Class
+class Student:
+    def __init__(self, first, last, school, phone, email, courses):
+        self.first = first
+        self.last = last
+        self.school = school
+        self.phone = phone
+        self.email = email
+        self.courses = courses
+        studentList.append(self)
+    # Print Method
+    def __str__(self):
+        return "Name: %s %s \n" \
+               "School: %s \n" \
+               "Phone Number: %s \n" \
+               "Email: %s" % (self.first, self.last, self.school, self.phone, self.email)
+
+    def get_courses(self):
+        print("Course list for " + self.first + " " + self.last)
+        print("--------")
+        if self.courses is list:
+            for course in self.courses:
+                print(course)
+                print("--------")
+        else:
+            print(self.courses)
+
+# Method used to create a new student from user input
+def user_input_student():
+    first = input('First Name: ')
+    last = input('Last Name: ')
+    school = input('School: ')
+    phone = input('Phone Number: ')
+    email = input('Email: ')
+    student = Student(first, last, school, phone, email)
+    return student
+
+# Method to print studentList
+def print_studentList(list):
+    for student in list:
+        print(student)
+    print("\n")
+
+# The find_match1 method to find a match for one class
+def find_match1(matching, course1):
+    possibleStudents=[]
+    matches=[]
+    print("Students from " + matching.school + " that are in " + matching.first + "'s " + course1.courseName
+          + " class:")
+    for student in studentList:
+        if matching.school == student.school and matching.first != student.first and matching.last != student.last:
+            possibleStudents.append(student)
+    for student in possibleStudents:
+        for course in student.courses:
+            if course == course1:
+                matches.append(student)
+    print_studentList(matches)
+
+# The find_match2 method to find a match for two classes
+def find_match2(matching, course1, course2):
+    possibleStudents=[]
+    matches=[]
+    print("Students from " + matching.school + " that are in " + matching.first + "'s " + course1.courseName
+          + " and " + course2.courseName + " classes:")
+    for student in studentList:
+        if matching.school == student.school and matching.first != student.first and matching.last != student.last:
+            possibleStudents.append(student)
+    for student in possibleStudents:
+        for course in student.courses:
+            if course == course1:
+                matches.append(student)
+    for student in matches:
+        check = 0
+        for course in student.courses:
+            if course == course2:
+                check += 1
+        if check == 0:
+            matches.remove(student)
+    print_studentList(matches)
+
+# Creating courses
+Calc3 = Course("Calculus 3", "MWF", "A")
+Computing = Course("Computing I", "TH", "B")
+Accounting = Course("Accounting I", "MWF", "B")
+
+# Creating a lists of courses
+dylanList = [Calc3, Accounting]
+jamesList = [Calc3, Computing]
+syedList = [Calc3, Accounting, Computing]
+
+# Printing a course
+#print(Calc3)
+
+# Creating the students
+dylan = Student("Dylan", "Harker", "Purdue", "317551234", "DH", dylanList)
+james = Student("James", "Zhou", "Purdue", "2565559876", "JZ", jamesList)
+syed = Student("Syed", "Oeshic", "Purdue", "3141592653", "SO", syedList)
+
+# Printing a student's information
+#print(dylan)
+
+# Printing a student's courses
+#print(dylan.get_courses())
+
+# Printing the Student List
+# print_studentList(studentList)
+
+# Using the find_match1 method
+# find_match1(dylan, Calc3)
+
+# Using the find_match2 method
+# find_match2(dylan, Calc3, Accounting)
+
+
+# User input code. This will really only in PyCharm until we know more about Flask.
+select = 73
+while select != 0:
+    print("Welcome to ClassMode!")
+    print("First select your user by entering the value by their name.")
+    x=1
+    for student in studentList:
+        print(x, "= " + student.first + " " + student.last)
+        x += 1
+    print(0, "= Exit ClassMode")
+    select = int(input('Enter your choice here: '))
+    if select == 1:
+        yourstudent = dylan
+    elif select == 2:
+        yourstudent = james
+    elif select == 3:
+        yourstudent = syed
+    if select == 1 or select == 2 or select == 3:
+        print("You are ")
+        print(yourstudent.__str__())
+    elif select == 0:
+        print("Goodbye!")
+    else:
+        print("Please select one of the choices: 0-3")
