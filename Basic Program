@@ -1,3 +1,5 @@
+import sys
+
 # The Course Class
 class Course:
     def __init__(self, courseName, days, section = "A"):
@@ -47,21 +49,21 @@ class Student:
     def get_courses(self):
         print("Course list for " + self.first + " " + self.last)
         print("--------")
-        if self.courses is list:
-            for course in self.courses:
-                print(course)
-                print("--------")
-        else:
-            print(self.courses)
+        #if self.courses == list:
+        for course in self.courses:
+            print(course.__str__())
+            print("--------")
+        #else:
+            #print(self.courses)
 
-# Method used to create a new student from user input
+# Method used to create a new student from user input. NOTE: Course list will be empty
 def user_input_student():
     first = input('First Name: ')
     last = input('Last Name: ')
     school = input('School: ')
     phone = input('Phone Number: ')
     email = input('Email: ')
-    student = Student(first, last, school, phone, email)
+    student = Student(first, last, school, phone, email, courses=[])
     return student
 
 # Method to print studentList
@@ -121,15 +123,15 @@ syedList = [Calc3, Accounting, Computing]
 #print(Calc3)
 
 # Creating the students
-dylan = Student("Dylan", "Harker", "Purdue", "317551234", "DH", dylanList)
-james = Student("James", "Zhou", "Purdue", "2565559876", "JZ", jamesList)
-syed = Student("Syed", "Oeshic", "Purdue", "3141592653", "SO", syedList)
+student1 = Student("Dylan", "Harker", "Purdue", "317551234", "DH", dylanList)
+student2 = Student("James", "Zhou", "Purdue", "2565559876", "JZ", jamesList)
+student3 = Student("Syed", "Oeshic", "Purdue", "3141592653", "SO", syedList)
 
 # Printing a student's information
 #print(dylan)
 
 # Printing a student's courses
-#print(dylan.get_courses())
+#print(student1.get_courses())
 
 # Printing the Student List
 # print_studentList(studentList)
@@ -141,27 +143,76 @@ syed = Student("Syed", "Oeshic", "Purdue", "3141592653", "SO", syedList)
 # find_match2(dylan, Calc3, Accounting)
 
 
-# User input code. This will really only in PyCharm until we know more about Flask.
-select = 73
-while select != 0:
-    print("Welcome to ClassMode!")
-    print("First select your user by entering the value by their name.")
-    x=1
-    for student in studentList:
-        print(x, "= " + student.first + " " + student.last)
-        x += 1
-    print(0, "= Exit ClassMode")
-    select = int(input('Enter your choice here: '))
-    if select == 1:
-        yourstudent = dylan
-    elif select == 2:
-        yourstudent = james
-    elif select == 3:
-        yourstudent = syed
-    if select == 1 or select == 2 or select == 3:
-        print("You are ")
-        print(yourstudent.__str__())
-    elif select == 0:
-        print("Goodbye!")
-    else:
-        print("Please select one of the choices: 0-3")
+# Below are methods that can run different "pages" of the website
+
+# Welcome screen method
+def welcome_screen():
+    select = 4
+    while select != 0 and select != 1 and select != 2 and select != 3:
+        print("Welcome to ClassMode!")
+        print("Enter the number that corresponds to hot you wish to proceed.")
+        print(1, "Login")
+        print(2, "Create an Account")
+        print(0, "Exit ClassMode")
+        select = int(input('Enter your choice here: '))
+        print()
+        if select == 1:
+            while select == 1:
+                print("Enter the number corresponding to your user.")
+                x = 1
+                for student in studentList:
+                    print(x, student.first + " " + student.last)
+                    x += 1
+                print(0, "Return")
+                select = int(input('Enter your choice here: '))
+                if select == 1:
+                    yourstudent = studentList[0]
+                elif select == 2:
+                    yourstudent = studentList[1]
+                elif select == 3:
+                    yourstudent = studentList[2]
+
+                if select == 1 or select == 2 or select == 3:
+                    print("You are ")
+                    print(yourstudent.__str__())
+                    print()
+                    select = 3
+                elif select == 0:
+                    select = 4
+                else:
+                    print("That is not a valid number.")
+                    select = 1
+        elif select == 2:
+            new_user()
+        elif select == 0:
+            print("Goodbye!")
+            sys.exit()
+        else:
+            print("Please select one of the choices: 0-3")
+            print()
+
+# Create a new student and his/her courses
+def new_user():
+    x = len(studentList)
+    print("To create your new user, please enter your information below.")
+    studentList[x-1] = user_input_student()
+    print()
+    print("Great! Now enter you class list.")
+    choice = 1
+    newcourselist=[]
+    while choice == 1:
+        newcourse = user_input_course()
+        newcourselist.append(newcourse)
+        print("To add another course enter 1. If you are done adding courses enter 0.")
+        choice = int(input('Select 1 or 0: '))
+    studentList[x-1].courses = newcourselist
+    print()
+    print("Here is your information!")
+    print(studentList[x-1].__str__())
+    print(studentList[x-1].get_courses())
+    print()
+
+# Below is the code that calls for the "webpages" these commonly call the above methods.
+
+# Welcome screen
+welcome_screen()
